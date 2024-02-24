@@ -1,6 +1,7 @@
-#include <substrate.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <Foundation/Foundation.h>
+#include <substrate.h>
+#import <dlfcn.h>
 #include "pac_helper.h"
 
 #define _FUNC_ADDR_(A, O) (const void *)((long)(A) + (O))
