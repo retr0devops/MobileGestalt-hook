@@ -44,7 +44,7 @@ static void HookGestalt() {
     }
 }
 
-static __attribute__((constructor)) void CHConstructor20() {
+static __attribute__((constructor)) void Constructor() {
     HookGestalt();
     // your code here
 }
