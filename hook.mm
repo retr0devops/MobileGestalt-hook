@@ -13,7 +13,14 @@ CFStringRef new_MGCopyAnswer_internal(CFStringRef property, uint32_t *outTypeCod
     return orig_MGCopyAnswer_internal(property, outTypeCode);
 }
 
+CFStringRef (*orig_MGGetStringAnswer)(CFStringRef property);
+CFStringRef new_MGGetStringAnswer(CFStringRef property) {
+    // your code here ...
+    return orig_MGGetStringAnswer_internal(property);
+}
+
 static void HookGestalt() {
+    // MGCopyAnswer
     void * ptrMGCopyAnswer = dlsym(dlopen("/usr/lib/libMobileGestalt.dylib", RTLD_NOW), "MGCopyAnswer");
     if (memcmp(make_sym_readable(ptrMGCopyAnswer), "\x01\x00\x80\xd2\x01\x00\x00\x14", 8) == 0)
     {
@@ -42,6 +49,8 @@ static void HookGestalt() {
                       (void **)&orig_MGCopyAnswer_internal);
         
     }
+    // MGGetStringAnswer
+    MSHookFunction((void *)dlsym(dlopen("/usr/lib/libMobileGestalt.dylib", RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD), "MGGetStringAnswer"), (void*)new_MGGetStringAnswer, (void**)&orig_MGGetStringAnswer); 
 }
 
 static __attribute__((constructor)) void Constructor() {
